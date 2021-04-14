@@ -108,8 +108,7 @@ def users():
 def edit(user_id):
     db = get_db()
     db.execute('update users set expert = 1 where id = ?', [user_id])
-    user_cursor = db.execute('select name from users where id = ?', [user_id]
-    user = user_cursor.fetchone()
+    user_cursor = db.execute('select name from users where id = ?', [user_id])
     db.commit()
 
     return f"Promoted user {user['name']} to expert"

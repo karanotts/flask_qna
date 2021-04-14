@@ -7,6 +7,9 @@
       <div class="page-header">
         <h1>Register</h1>
       </div>
+      {% if error %}
+      <div><h3>{{ error }}</h3></div>
+      {% endif %}
       <div class="row">
         <div class="col-lg-12">
           <div class="well bs-component">

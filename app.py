@@ -44,9 +44,16 @@ def index():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     user = get_current_user()
+    
     if request.method == 'POST':
         # return f'Name: {request.form["name"]}, Password: {request.form["password"]}'
         db = get_db()
+        user_exists_cursor = db.execute('select id from users where name = ?', [request.form["name"]])
+        user_exists_result = user_exists_cursor.fetchone()
+        if user_exists_result:
+            # return "This username is already taken"
+            return render_template('register.html', user=user, error="This username is already taken, please select a different name.")
+
         hashed_password = generate_password_hash(request.form["password"], method='sha256')
         db.execute('insert into users (name, password, expert, admin) values (?, ?, ?, ?)', [request.form["name"], hashed_password, 0, 0])
         db.commit()

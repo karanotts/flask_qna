@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
+{% from "navbar.html" import navbar %}
 
 {% block title %}Register{% endblock %}
+
+{% block nav %}
+  {{ navbar(user) }}
+{% endblock %}
 
 {% block body %}
 

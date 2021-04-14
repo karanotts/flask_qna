@@ -168,7 +168,7 @@ def users():
     user = get_current_user()
     if not user:
         return redirect(url_for('login'))
-    if not user['expert']:
+    if not user['admin']:
         return redirect(url_for('index'))
 
     db = get_db()
@@ -178,9 +178,10 @@ def users():
 
 @app.route('/edit/<user_id>')
 def edit(user_id):
+    user = get_current_user()
     if not user:
         return redirect(url_for('login'))
-    if not user['expert']:
+    if not user['admin']:
         return redirect(url_for('index'))
     db = get_db()
     db.execute('update users set expert = 1 where id = ?', [user_id])

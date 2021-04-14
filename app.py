@@ -109,6 +109,11 @@ def question(question_id):
 @app.route('/answer/<question_id>', methods=['GET', 'POST'])
 def answer(question_id):
     user = get_current_user()
+    if not user:
+        return redirect(url_for('login'))
+    if not user['expert']:
+        return redirect(url_for('index'))
+
     db = get_db()
 
     if request.method == 'POST':
@@ -124,8 +129,9 @@ def answer(question_id):
 
 @app.route('/ask', methods=['GET', 'POST'])
 def ask():
-
     user = get_current_user()
+    if not user:
+        return redirect(url_for('login'))
     db = get_db()
 
     if request.method == 'POST':
@@ -142,6 +148,10 @@ def ask():
 @app.route('/unanswered')
 def unanswered():
     user = get_current_user()
+    if not user:
+        return redirect(url_for('login'))
+    if not user['expert']:
+        return redirect(url_for('index'))
     db = get_db()
     questions_cursor = db.execute('''select questions.id, questions.question_text, users.name from questions 
                                     join users on users.id = questions.asked_by_id
@@ -154,6 +164,11 @@ def unanswered():
 @app.route('/users')
 def users():
     user = get_current_user()
+    if not user:
+        return redirect(url_for('login'))
+    if not user['expert']:
+        return redirect(url_for('index'))
+
     db = get_db()
     users_cursor = db.execute('select id, name, expert, admin from users')
     users_result = users_cursor.fetchall()
@@ -161,6 +176,10 @@ def users():
 
 @app.route('/edit/<user_id>')
 def edit(user_id):
+    if not user:
+        return redirect(url_for('login'))
+    if not user['expert']:
+        return redirect(url_for('index'))
     db = get_db()
     db.execute('update users set expert = 1 where id = ?', [user_id])
     db.commit()
